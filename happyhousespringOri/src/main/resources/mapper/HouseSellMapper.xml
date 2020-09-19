@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.model.dao.HouseSellDao">
+   
+   <select id="getTotalCount" resultType="int">
+      select count(no) 
+      from housesell
+      where 1=1 and type in
+      <foreach item="type" index="index" collection="searchType" open="(" separator="," close=")">
+         <if test="type">
+            #{index}
+         </if>
+      </foreach>
+      <choose>
+         <when test="dong!= null and !dong.equals('')">
+            and dong like concat("%", #{dong}, "%")
+         </when>
+         <when test="aptname!= null and !aptname.equals('')">
+            and aptName like concat("%", #{aptname}, "%")
+         </when>
+      </choose>
+   </select>
+   
+   <select id="searchAll" resultType="HouseSell">
+      select * from housesell
+      where 1=1 and type in 
+      <foreach item="type" index="index" collection="bean.searchType" open="(" separator="," close=")" >
+         <if test="type">
+            #{index}
+         </if>
+      </foreach>
+      <if test="bean.dongcode != null and !bean.dongcode.equals('')">
+         and code = #{bean.dongcode}
+         and dong like concat("%", #{bean.dong}, "%")
+      </if>
+      <if test="bean.aptname != null and !bean.aptname.equals('')">
+      	and aptName like concat("%", #{bean.aptname}, "%")
+      </if>
+      order by no desc
+      limit #{currentPage}, #{sizePerPage}
+   </select>
+   <select id="getHouseSell" resultType="HouseSell">
+      select * from housesell where no = #{no}
+   </select>
+   <select id="search" resultType="HouseSell">
+      select * from housesell order by no
+   </select>
+    <select id="check" resultType="int">
+      select count(*) from f_house where houseno = #{no} and id = #{id}
+   </select>
+   <insert id="addSell">
+      insert into f_house (id, houseno)
+      values (#{id}, #{no})
+   </insert>
+   <delete id="deleteSell">
+      delete from f_house where houseno = #{no} and id = #{id}
+   </delete> 
+	<select id="searchMyHome" resultType="HouseSell">
+      select * from housesell
+      where seller = #{seller}
+      order by no desc
+   </select>
+   
+   <insert id="houseSellReg">
+   		insert into housesell
+   		(dong, aptName, code, dealAmount, buildYear, regYear, regMonth, regDay, area, floor, jibun, type, phone, seller)
+   		values
+   		(#{dong}, #{aptName}, #{code}, #{dealAmount}, #{buildYear}, #{regYear}, #{regMonth}, #{regDay}, #{area}, #{floor}, #{jibun}, #{type}, #{phone}, #{seller})
+   </insert>
+   <delete id="deletehouseSell">
+      delete from housesell where no = #{no}
+   </delete> 
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.model.dao.EnvironmentDao">
+
+	
+	<select id="searchEnvironment" resultType="Environment">
+		select pm10, pm25, gye, GAESO_1
+		from air, water, green
+		where air.city=#{city} and air.MSRSTENAME=#{gu} and 
+			water.city=#{city} and water.JACHIGU=#{gu} and 
+			green.city=#{city} and green.JACHIGU=#{gu}
+		
+	</select>
+	
+	<select id="searchCity" resultType="string">
+		select city
+		from dongcode
+		where code = #{code}
+	</select>
+	
+	<select id="searchGugun" resultType="string">
+		select gugun
+		from dongcode
+		where code = #{code}
+	</select>
+</mapper>

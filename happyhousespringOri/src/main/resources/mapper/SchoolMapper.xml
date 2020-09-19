@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.model.dao.SchoolDao">
+
+	<select id="searchSchool" resultType="School">
+		select * from school
+		where code = #{code}
+	</select>
+	
+	<select id="countElementary" resultType="int">
+		select count(grade) from school
+		where code = #{code} and grade = '초등학교'
+	</select>
+	<select id="countMiddle" resultType="int">
+		select count(grade) from school
+		where code = #{code} and grade = '중학교'
+	</select>
+	<select id="countHigh" resultType="int">
+		select count(grade) from school
+		where code = #{code} and grade = '고등학교'
+	</select>
+</mapper>

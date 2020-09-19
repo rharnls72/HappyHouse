@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.model.dao.FavoriteDao">
+	
+	<select id="selectSido" resultType="SidoCodeDTO">
+		SELECT left(sido_code,2) sido_code, sido_name FROM sidocode
+		ORDER BY sido_code
+	</select>
+	<select id="selectGugun" resultType="SidoCodeDTO">
+		SELECT left(gugun_code,5) gugun_code, gugun_name FROM guguncode
+		where left(gugun_code,2) = #{sido}
+		ORDER BY gugun_code
+	</select>
+	<select id="search" resultType="Favorite">
+		select * from favorite where clientId = #{userid}
+	</select>
+	<select id="searchHouse" resultType="HouseSell">
+		select * from housesell, f_house where f_house.id = #{userid} and f_house.houseno = housesell.no
+	</select>
+	<select id="searchCode" resultType="int">
+		select count(*) from favorite where clientId = #{userid} and code = #{code}
+	</select>
+	<select id="selectDong" resultType="SidoCodeDTO">
+		SELECT distinct dong as dong_name, code FROM dongcode
+		where dongcode = #{gugun}
+		ORDER BY dong_name
+	</select>
+	<select id="select" resultType="Favorite">
+		SELECT city, code, gugun, dong FROM dongcode
+		where code = #{code}
+	</select>
+	<delete id="remove">
+		delete from Favorite where no = #{no}
+	</delete>
+	<insert id="add">
+		<!-- getstrings 부른 후  city, gu, dongcode=시+구코드 설정-->
+		insert into Favorite(clientId, city, gugun, code, dong) 
+		values(#{clientId}, #{city}, #{gugun}, #{code}, #{dong})
+	</insert>
+	<select id="getCode" resultType="Favorite">
+		SELECT code FROM dongcode
+		where dongcode = #{code} and dong = #{dong}
+	</select>
+</mapper>

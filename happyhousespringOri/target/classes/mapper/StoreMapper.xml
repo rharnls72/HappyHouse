@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.model.dao.StoreDao">
+
+   <insert id="insert">
+      insert into patient values(#{pno}, #{name}, #{age}, #{ccode})
+   </insert>
+   
+   <select id="getTotalCount" resultType="Integer">
+      select count(no) from shop where dongcode = #{code}
+      <if test="key == 'category'">
+      and( codename1 like concat('%', #{word}, '%') or 
+      codename2 like  concat('%', #{word}, '%') or 
+      codename3 like  concat('%', #{word}, '%') 
+      or codename4 like  concat('%', #{word}, '%'))
+      </if>
+      <if test="key == 'name'">
+      and shopname like concat('%', #{word}, '%')
+      </if>
+   </select>
+   <select id="cntMart" resultType="Integer">
+      select count(no) from shop where dongcode = #{code} and codename2 like  concat('%종합소매%')
+   </select>
+   <select id="cntCafe" resultType="Integer">
+      select count(no) from shop where dongcode = #{code} and codename2 like  concat('%카페%')
+   </select>
+   <select id="searchAll" resultType="StoreInfo">
+      select * from shop
+      where dongcode = #{code}
+      <if test="pageBean.key == 'category'">
+      and( codename1 like concat('%', #{pageBean.word}, '%') or 
+      codename2 like  concat('%', #{pageBean.word}, '%') or 
+      codename3 like  concat('%', #{pageBean.word}, '%') 
+      or codename4 like  concat('%', #{pageBean.word}, '%'))
+      </if>
+      <if test="pageBean.key == 'name'">
+      and shopname like concat('%', #{pageBean.word}, '%')
+      </if>
+      limit #{pageBean.pg}, #{pageBean.spp}
+   </select>
+   
+   <!-- <select id="searchAll" resultType="StoreInfo">
+      select * from shop where city=#{favorite.city} and gu=#{favorite.gu} and dong=#{favorite.dong}
+      <if test="pageBean.key == 'category'">
+      and( codename1 like concat('%', #{pageBean.word}, '%') or 
+      codename2 like  concat('%', #{pageBean.word}, '%') or 
+      codename3 like  concat('%', #{pageBean.word}, '%') 
+      or codename4 like  concat('%', #{pageBean.word}, '%'))
+      </if>
+      <if test="pageBean.key == 'name'">
+      and shopname like concat('%', #{pageBean.word}, '%')
+      </if>
+      limit #{pageBean.pg}, #{pageBean.spp}
+   </select> -->
+   
+</mapper>

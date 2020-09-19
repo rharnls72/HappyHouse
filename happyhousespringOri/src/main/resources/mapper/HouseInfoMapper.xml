@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.model.dao.HouseInfoDao">
+
+	<insert id="addHouseInfo">
+		insert into houseinfo (dong, aptname, code, buildyear, jibun, lat, lng)
+		values(#{dong}, #{AptName}, #{code}, #{buildYear}, #{jibun}, #{lat}, #{lng})
+	</insert>
+	
+	<select id="searchAllHouseInfo" resultType="HouseInfo">
+		select dong, code, jibun from houseinfo
+	</select>
+	
+	<select id="searchHouseInfo" resultType="HouseInfo">
+		select * from houseinfo 
+		where (dong, code, jibun) =
+		<foreach item="arr" index="index" collection="array" open="(" separator="," close=")">
+			#{arr}
+		</foreach>
+	</select>
+
+	<update id="updateHouseInfo">
+		update houseinfo set aptname = #{aptname}, buildyear = #{buildyear}, lat = #{lat}, lng =#{lng}, img = #{img}
+		where dong = #{dong} and code = #{code} and jibun = #{jibun}
+	</update>
+	
+	<delete id="deleteHouseInfo">
+		delete from HouseInfo where no = #{no}
+	</delete>
+</mapper>

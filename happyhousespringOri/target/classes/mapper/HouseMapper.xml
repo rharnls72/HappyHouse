@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.model.dao.HouseDao">
+
+   
+   <select id="getTotalCount" resultType="int">
+      select count(no) 
+      from housedeal 
+      where 1=1 and type in
+      <foreach item="type" index="index" collection="searchType" open="(" separator="," close=")">
+         <if test="type">
+            #{index}
+         </if>
+      </foreach>
+      <choose>
+         <!-- dong, aptName trim.. 어떻게 붙이지요? -->
+         <when test="dong!= null and !dong.equals('')">
+            and dong like concat("%", #{dong}, "%")
+         </when>
+         <when test="aptname!= null and !aptname.equals('')">
+            and aptName like concat("%", #{aptname}, "%")
+         </when>
+      </choose>
+   </select>
+   
+   <select id="searchAll" resultType="HouseDeal">
+      select * from housedeal
+      where 1=1 and type in 
+      <foreach item="type" index="index" collection="bean.searchType" open="(" separator="," close=")" >
+         <if test="type">
+            #{index}
+         </if>
+      </foreach>
+      <if test="bean.dongcode != null and !bean.dongcode.equals('')">
+         and code = #{bean.dongcode}
+         and dong like concat("%", #{bean.dong}, "%")
+      </if>
+      <if test="bean.aptname != null and !bean.aptname.equals('')">
+      	and aptName like concat("%", #{bean.aptname}, "%")
+      </if>
+      limit #{currentPage}, #{sizePerPage}
+   </select>
+   
+   <select id="search" resultType="HouseDeal">
+      select * from housedeal order by no
+   </select>
+</mapper>
